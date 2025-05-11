@@ -182,3 +182,53 @@ def game_dict():
             ]
         }
     }
+
+dictionary = game_dict()
+def num_points_per_game(name):
+    try:
+        points = next((player for player in dictionary['home']['players'] if player['name'] == name))['points_per_game']
+    except:
+        points = next((player for player in dictionary['away']['players'] if player['name'] == name))['points_per_game']
+    return points
+    
+def player_age(name):
+    try:
+        age = next((player for player in dictionary['home']['players'] if player['name'] == name))['age']
+    except:
+        age = next((player for player in dictionary['away']['players'] if player['name'] == name))['age']
+    return age
+
+def team_colors(name):
+    return dictionary['home']['colors'] if name == dictionary["home"]['team_name'] else dictionary['away']['colors']
+
+def team_names():
+    return [dictionary["home"]["team_name"], dictionary["away"]['team_name']]
+
+def player_numbers(name):
+    numbers = [player['number'] for player in dictionary["home"]['players']] if dictionary['home']['team_name'] == name else [player['number'] for player in dictionary["away"]['players']]
+    return numbers
+
+def player_stats(name):
+    try:
+        stats = next((player for player in dictionary['home']['players'] if player['name'] == name))
+    except:
+        stats = next((player for player in dictionary['away']['players'] if player['name'] == name))
+    return stats
+
+def average_rebounds_by_shoe_brand():
+    brands = {}
+    for player in dictionary['home']['players']:
+        if player['shoe_brand'] not in brands.keys():
+            brands[player['shoe_brand']] = []
+        brands[player['shoe_brand']].append(player['rebounds_per_game'])
+            
+    for player in dictionary['away']['players']:
+        if player['shoe_brand'] not in brands.keys():
+            brands[player['shoe_brand']] = []
+        brands[player['shoe_brand']].append(player['rebounds_per_game'])
+        
+    for key, value in brands.items():
+        brands[key] = (sum(value) / len(value))
+        print(f"{key}:  {(sum(value) / len(value)):.2f}")
+    
+average_rebounds_by_shoe_brand()
